@@ -133,7 +133,7 @@ export function AsideShoppingCart({
 
       <Divider />
 
-      <ScrollView className="flex-1" contentContainerClassName="grow">
+      <ScrollView className="flex-1 bg-base" contentContainerClassName="grow">
         {isEmpty ? (
           <View className="flex-1 items-center justify-center py-8">
             <ShoppingBag size={64} color={MUTED_ICON_COLOR} />

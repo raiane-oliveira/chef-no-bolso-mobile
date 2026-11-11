@@ -1,9 +1,6 @@
 import { ProductCard } from "@/entities/product/ui/product-card";
-import { useShoppingCartContext } from "@/features/add-to-cart/model/shopping-cart-context";
-import { AsideShoppingCart } from "@/features/add-to-cart/ui/aside-shopping-cart";
 import { useCategories } from "@/features/get-categories/model/get-categories";
 import type { Category, Product } from "@/shared/api/types";
-import { priceFormatter } from "@/shared/lib/formatters";
 import { cn } from "@/shared/lib/utils";
 import { AppText } from "@/shared/ui/app-text";
 import { Button } from "@/shared/ui/button";
@@ -12,13 +9,7 @@ import { Sheet } from "@/shared/ui/sheet";
 import { CompanyInfoContent } from "@/widgets/company-info-content";
 import { Footer } from "@/widgets/footer";
 import { Image } from "expo-image";
-import {
-  ChefHat,
-  Gift,
-  MapPin,
-  Search,
-  ShoppingBag,
-} from "lucide-react-native";
+import { ChefHat, MapPin, Search } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 
@@ -36,7 +27,6 @@ function mockProducts(count: number, size: number): Product[] {
 }
 
 export default function HomeScreen() {
-  const { orders, totalItemsInCart, totalValue } = useShoppingCartContext();
   const { data: categoriesData, isLoading: isCategoriesLoading } =
     useCategories();
   const categories: Category[] = categoriesData?.categories || [];
@@ -44,15 +34,12 @@ export default function HomeScreen() {
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [infoOpen, setInfoOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
-
-  const hasCart = orders.length > 0;
 
   return (
     <View className="flex-1 bg-base">
       <ScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ paddingBottom: hasCart ? 88 : 24 }}
+        contentContainerStyle={{ paddingBottom: 120 }}
       >
         {/* Capa */}
         <Image
@@ -211,32 +198,6 @@ export default function HomeScreen() {
         <Footer />
       </ScrollView>
 
-      {/* Barra "Ver sacola" */}
-      {hasCart && (
-        <Pressable
-          onPress={() => setCartOpen(true)}
-          className="fixed w-full left-0 z-50 bottom-[72.5px] flex-row items-center justify-between bg-primary px-4 py-3 active:opacity-90"
-        >
-          <View>
-            <ShoppingBag size={28} color="#fff" />
-            <View className="absolute -bottom-1 -right-2 size-5 items-center justify-center rounded-full bg-card">
-              <AppText className="text-xs text-accent-foreground">
-                {totalItemsInCart}
-              </AppText>
-            </View>
-          </View>
-          <AppText
-            weight="medium"
-            className="text-base text-primary-foreground"
-          >
-            Ver sacola
-          </AppText>
-          <AppText className="text-base text-primary-foreground">
-            {priceFormatter.format(totalValue)}
-          </AppText>
-        </Pressable>
-      )}
-
       {/* Dialog "Mais informações" */}
       <Sheet
         visible={infoOpen}
@@ -245,17 +206,6 @@ export default function HomeScreen() {
         icon={<ChefHat size={26} color="#18181b" />}
       >
         <CompanyInfoContent />
-      </Sheet>
-
-      {/* Dialog fullscreen da sacola */}
-      <Sheet
-        visible={cartOpen}
-        onClose={() => setCartOpen(false)}
-        title="ChefNoBolso"
-        icon={<ChefHat size={26} color="#18181b" />}
-        scroll={false}
-      >
-        <AsideShoppingCart />
       </Sheet>
     </View>
   );

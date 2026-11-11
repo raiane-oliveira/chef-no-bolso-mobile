@@ -57,7 +57,7 @@ export function Footer({ className, ...props }: FooterProps) {
   return (
     <View
       {...props}
-      className={`mt-20 items-center justify-between gap-4 border-t border-line px-4 py-7 ${className ?? ""}`}
+      className={`mt-16 items-center justify-between gap-4 border-t border-line px-4 py-7 ${className ?? ""}`}
     >
       <AppText className="text-sm text-muted-foreground text-center">
         © {year} ChefNoBolso. Todos os direitos reservados.

@@ -13,8 +13,9 @@ import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Link, useRouter } from "expo-router";
 import { useRef, useState } from "react";
-import { Pressable, Text, TextInputInstance, View } from "react-native";
+import { Pressable, TextInputInstance, View } from "react-native";
 import { useAuthContext } from "../model/authentication-context";
+import { AppText } from "@/shared/ui/app-text";
 
 export function SignInCard() {
   const { handleLogin } = useAuthContext();
@@ -27,7 +28,10 @@ export function SignInCard() {
   const [error, setError] = useState("");
 
   async function handleSubmit() {
+    console.log("[LOGIN] 1 - Iniciando");
+
     if (isPending) return;
+
     setError("");
 
     const trimmedEmail = email.trim();
@@ -40,28 +44,41 @@ export function SignInCard() {
     setIsPending(true);
 
     try {
+      console.log("[LOGIN] 2 - Antes do fetch");
+
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: trimmedEmail, password }),
       });
 
+      console.log("[LOGIN] 3 - Resposta recebida");
+
       const data = await response.json();
 
+      console.log("[LOGIN] 4 - JSON recebido");
+
       if (!response.ok) {
+        console.log("[LOGIN] 5 - Resposta HTTP com erro");
         setError(data?.message || "Email ou senha inválidos.");
         return;
       }
+
+      console.log("[LOGIN] 6 - Antes do handleLogin");
 
       await handleLogin({
         accessToken: data.token,
         role: data.user.role,
       });
 
+      console.log("[LOGIN] 7 - Antes do router.replace");
+
       router.replace("/");
-    } catch {
+    } catch (err) {
+      console.error("[LOGIN] ERRO:", err);
       setError("Não foi possível conectar ao servidor.");
     } finally {
+      console.log("[LOGIN] 8 - Finalizando");
       setIsPending(false);
     }
   }
@@ -93,9 +110,9 @@ export function SignInCard() {
             <View className="flex-row items-center">
               <Label>Senha</Label>
               <Pressable accessibilityRole="link" className="ml-auto">
-                <Text className="text-sm text-foreground underline">
+                <AppText className="text-sm text-foreground underline">
                   Esqueceu sua senha?
-                </Text>
+                </AppText>
               </Pressable>
             </View>
             <Input
@@ -109,7 +126,7 @@ export function SignInCard() {
           </View>
 
           {error ? (
-            <Text className="text-sm text-destructive">{error}</Text>
+            <AppText className="text-sm text-destructive">{error}</AppText>
           ) : null}
         </View>
       </CardContent>

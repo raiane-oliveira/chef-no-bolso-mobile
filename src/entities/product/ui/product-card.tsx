@@ -49,7 +49,7 @@ export function ProductCard({
           accessibilityRole="button"
           accessibilityLabel={product.name}
           onPress={() => setOpen(true)}
-          className="flex-row items-start gap-3 overflow-hidden rounded-md border border-line bg-card px-3 py-4"
+          className="flex-row max-h-44 items-start gap-3 overflow-hidden rounded-md border border-line bg-card px-3 py-4"
           style={(state) =>
             typeof style === "function" ? style(state) : style
           }

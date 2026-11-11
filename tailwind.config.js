@@ -5,6 +5,13 @@ module.exports = {
   darkMode: "class",
   theme: {
     extend: {
+      elevation: {
+        sm: "2",
+        md: "4",
+        lg: "8",
+        xl: "12",
+        "2xl": "16",
+      },
       colors: {
         background: "#FDFBF9",
         foreground: "#20100C",

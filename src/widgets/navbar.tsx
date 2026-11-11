@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useRouter, usePathname } from "expo-router";
+import { priceFormatter } from "@/shared/lib/formatters";
 import {
   HouseIcon,
   MagnifyingGlassIcon,
@@ -22,12 +23,20 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
 import { AppText } from "@/shared/ui/app-text";
+import { useShoppingCartContext } from "@/features/add-to-cart/model/shopping-cart-context";
+import { Sheet } from "@/shared/ui/sheet";
+import { AsideShoppingCart } from "@/features/add-to-cart/ui/aside-shopping-cart";
+import { ChefHat } from "lucide-react-native";
 
 export function Navbar() {
+  const [cartOpen, setCartOpen] = useState(false);
   const { session, handleLogout } = useAuthContext();
+  const { orders, totalItemsInCart, totalValue } = useShoppingCartContext();
   const router = useRouter();
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const hasCart = orders.length > 0;
 
   const isActive = (path: string) =>
     pathname === path || pathname.startsWith(`${path}/`);
@@ -38,8 +47,34 @@ export function Navbar() {
   };
 
   return (
-    <View className="absolute bottom-0 left-0 right-0 z-50 border-t border-line bg-header-bg px-2 pb-3 pt-2">
-      <View className="mx-auto w-full flex-row items-center justify-between gap-1">
+    <View className="absolute bottom-0 left-0 right-0 z-50">
+      {/* Barra "Ver sacola" */}
+      {hasCart && (
+        <Pressable
+          onPress={() => setCartOpen(true)}
+          className="w-full flex-row items-center justify-between bg-primary px-4 py-3 active:opacity-90"
+        >
+          <View>
+            <ShoppingBag size={28} color="#fff" />
+            <View className="absolute -bottom-1 -right-2 size-5 items-center justify-center rounded-full bg-card">
+              <AppText className="text-xs text-accent-foreground">
+                {totalItemsInCart}
+              </AppText>
+            </View>
+          </View>
+          <AppText
+            weight="medium"
+            className="text-base text-primary-foreground"
+          >
+            Ver sacola
+          </AppText>
+          <AppText className="text-base text-primary-foreground">
+            {priceFormatter.format(totalValue)}
+          </AppText>
+        </Pressable>
+      )}
+
+      <View className="mx-auto w-full flex-row items-center border-t border-line bg-header-bg px-2 pb-3 pt-2 justify-between gap-1">
         <NavLink
           to="/"
           label="Início"
@@ -122,6 +157,17 @@ export function Navbar() {
           />
         )}
       </View>
+
+      {/* Dialog fullscreen da sacola */}
+      <Sheet
+        visible={cartOpen}
+        onClose={() => setCartOpen(false)}
+        title="ChefNoBolso"
+        icon={<ChefHat size={26} color="#18181b" />}
+        scroll={false}
+      >
+        <AsideShoppingCart />
+      </Sheet>
     </View>
   );
 }

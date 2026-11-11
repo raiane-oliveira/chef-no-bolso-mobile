@@ -20,7 +20,7 @@ function Card({ className, ...props }: CardProps) {
   return (
     <View
       className={cn(
-        "flex-col gap-6 rounded-xl border border-border bg-card py-6 shadow-sm",
+        "flex-col gap-6 rounded-xl border border-border bg-card py-6 shadow-sm elevation-sm",
         className,
       )}
       {...props}

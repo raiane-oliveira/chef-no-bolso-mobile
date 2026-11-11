@@ -37,7 +37,7 @@ export function InputUpdateOrderCartAmount({
   }
 
   const iconSize = compact ? 12 : 14;
-  const decreaseDisabled = amount <= MIN_AMOUNT;
+  const decreaseDisabled = amount < MIN_AMOUNT;
 
   return (
     <View
