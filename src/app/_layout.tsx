@@ -1,18 +1,45 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import "../global.css";
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import { ShoppingCartContextProvider } from "@/features/add-to-cart/model/shopping-cart-context";
+import { AuthenticationContextProvider } from "@/features/auth/model/authentication-context";
+import { Navbar } from "@/widgets/navbar";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
-SplashScreen.preventAutoHideAsync();
+const queryClient = new QueryClient();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthenticationContextProvider>
+          <ShoppingCartContextProvider>
+            <Navbar />
+            <StatusBar style="auto" />
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="(tabs)" />
+              <Stack.Screen
+                name="auth/login"
+                options={{
+                  headerShown: true,
+                  title: "Entrar",
+                  presentation: "modal",
+                }}
+              />
+              <Stack.Screen
+                name="auth/register"
+                options={{
+                  headerShown: true,
+                  title: "Cadastrar",
+                  presentation: "modal",
+                }}
+              />
+            </Stack>
+          </ShoppingCartContextProvider>
+        </AuthenticationContextProvider>
+      </QueryClientProvider>
+    </SafeAreaProvider>
   );
 }
