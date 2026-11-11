@@ -3,21 +3,13 @@ import {
   Image,
   Modal,
   Pressable,
-  StyleSheet,
-  Text,
   View,
   type PressableProps,
 } from "react-native";
 import { priceFormatter } from "@/shared/lib/formatters";
 import type { Product } from "@/shared/api/types";
 import { AddToCartDialogContent } from "@/features/add-to-cart/ui/add-to-cart-dialog-content";
-
-const colors = {
-  card: "#171717",
-  border: "#262626",
-  foreground: "#fafafa",
-  muted: "#a3a3a3",
-};
+import { AppText } from "@/shared/ui/app-text";
 
 interface ProductCardProps extends Omit<PressableProps, "style"> {
   product: Product;
@@ -57,36 +49,53 @@ export function ProductCard({
           accessibilityRole="button"
           accessibilityLabel={product.name}
           onPress={() => setOpen(true)}
-          style={(state) => [
-            styles.card,
-            styles.cardHorizontal,
-            typeof style === "function" ? style(state) : style,
-          ]}
+          className="flex-row items-start gap-3 overflow-hidden rounded-md border border-line bg-card px-3 py-4"
+          style={(state) =>
+            typeof style === "function" ? style(state) : style
+          }
         >
           {({ pressed }) => (
             <>
-              <View style={styles.horizontalInfo}>
-                <View style={styles.header}>
-                  <Text numberOfLines={1} style={styles.title}>
+              <View className="flex-1 gap-3">
+                <View className="flex-1 gap-1 px-1.5">
+                  <AppText
+                    numberOfLines={1}
+                    className="text-base text-card-foreground"
+                    weight="medium"
+                  >
                     {product.name}
-                  </Text>
-                  <Text numberOfLines={3} style={styles.description}>
+                  </AppText>
+
+                  <AppText
+                    numberOfLines={3}
+                    className="text-sm text-muted-foreground"
+                    weight="light"
+                  >
                     {product.description}
-                  </Text>
+                  </AppText>
                 </View>
 
-                <View style={styles.footer}>
-                  <Text style={styles.price}>{priceFormatted}</Text>
+                <View className="px-1.5">
+                  <AppText className="text-base text-card-foreground">
+                    {priceFormatted}
+                  </AppText>
                 </View>
               </View>
 
-              <View style={styles.horizontalImageWrapper}>
+              <View className="w-32 self-stretch overflow-hidden rounded-sm">
                 <Image
                   source={{ uri: product.imageUrl }}
                   accessibilityElementsHidden
-                  style={[styles.image, pressed && styles.imagePressed]}
+                  className="h-full w-full"
+                  resizeMode="cover"
+                  style={pressed ? { transform: [{ scale: 1.05 }] } : undefined}
                 />
-                {!pressed && <View style={styles.imageOverlay} />}
+                {!pressed && (
+                  <View
+                    className="absolute inset-0"
+                    style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+                  />
+                )}
               </View>
             </>
           )}
@@ -104,34 +113,58 @@ export function ProductCard({
         accessibilityRole="button"
         accessibilityLabel={product.name}
         onPress={() => setOpen(true)}
+        className="gap-3 overflow-hidden rounded-md border border-line bg-card p-1"
         style={(state) => [
-          styles.card,
-          styles.cardVertical,
+          {
+            shadowColor: "#000",
+            shadowOpacity: 0.2,
+            shadowRadius: 4,
+            shadowOffset: { width: 0, height: 2 },
+            elevation: 3,
+          },
           typeof style === "function" ? style(state) : style,
         ]}
       >
         {({ pressed }) => (
           <>
-            <View style={styles.verticalImageWrapper}>
+            <View className="aspect-[1.25] w-full overflow-hidden rounded-md">
               <Image
                 source={{ uri: product.imageUrl }}
                 accessibilityElementsHidden
-                style={[styles.image, pressed && styles.imagePressed]}
+                className="h-full w-full"
+                resizeMode="cover"
+                style={pressed ? { transform: [{ scale: 1.05 }] } : undefined}
               />
-              {!pressed && <View style={styles.imageOverlay} />}
+              {!pressed && (
+                <View
+                  className="absolute inset-0"
+                  style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+                />
+              )}
             </View>
 
-            <View style={styles.header}>
-              <Text numberOfLines={1} style={styles.title}>
+            <View className="flex-1 gap-1 px-1.5">
+              <AppText
+                numberOfLines={1}
+                className="text-base text-card-foreground"
+                weight="medium"
+              >
                 {product.name}
-              </Text>
-              <Text numberOfLines={2} style={styles.description}>
+              </AppText>
+
+              <AppText
+                numberOfLines={2}
+                className="text-sm text-muted-foreground"
+                weight="light"
+              >
                 {product.description}
-              </Text>
+              </AppText>
             </View>
 
-            <View style={styles.footerPadded}>
-              <Text style={styles.price}>{priceFormatted}</Text>
+            <View className="p-1.5">
+              <AppText className="text-base text-card-foreground">
+                {priceFormatted}
+              </AppText>
             </View>
           </>
         )}
@@ -141,84 +174,3 @@ export function ProductCard({
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: colors.card,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: colors.border,
-    overflow: "hidden",
-  },
-  cardVertical: {
-    padding: 4,
-    gap: 12,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
-  },
-  cardHorizontal: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    paddingHorizontal: 12,
-    paddingVertical: 16,
-    gap: 12,
-  },
-  horizontalInfo: {
-    flex: 1,
-    gap: 12,
-  },
-  horizontalImageWrapper: {
-    maxWidth: 128,
-    width: 128,
-    alignSelf: "stretch",
-    borderRadius: 4,
-    overflow: "hidden",
-  },
-  verticalImageWrapper: {
-    width: "100%",
-    aspectRatio: 1 / 0.8,
-    borderRadius: 6,
-    overflow: "hidden",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-  },
-  imagePressed: {
-    transform: [{ scale: 1.05 }],
-  },
-  imageOverlay: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: "rgba(0,0,0,0.4)",
-  },
-  header: {
-    flex: 1,
-    paddingHorizontal: 6,
-    gap: 4,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: colors.foreground,
-  },
-  description: {
-    fontSize: 14,
-    fontWeight: "300",
-    color: colors.muted,
-  },
-  footer: {
-    paddingHorizontal: 6,
-  },
-  footerPadded: {
-    padding: 6,
-  },
-  price: {
-    fontSize: 16,
-    fontWeight: "400",
-    color: colors.foreground,
-  },
-});

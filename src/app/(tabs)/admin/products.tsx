@@ -3,6 +3,7 @@ import { RoleGate } from "@/features/auth/ui/role-gate";
 import { API_URL } from "@/shared/config/env";
 import { priceFormatter } from "@/shared/lib/formatters";
 import { cn } from "@/shared/lib/utils";
+import { AppText } from "@/shared/ui/app-text";
 import { Button } from "@/shared/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
@@ -13,7 +14,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import { Pencil, Plus, Search, Trash2 } from "lucide-react-native";
 import { useMemo, useState } from "react";
-import { Alert, Pressable, Switch, Text, View } from "react-native";
+import { Alert, Pressable, Switch, View } from "react-native";
 
 interface Product {
   id: string;
@@ -208,15 +209,15 @@ function ProductsContent() {
       </Button>
 
       {isLoading ? (
-        <Text className="py-10 text-center text-foreground">
+        <AppText className="py-10 text-center text-foreground">
           Carregando produtos...
-        </Text>
+        </AppText>
       ) : filteredProducts.length === 0 ? (
-        <Text className="py-10 text-center text-muted-foreground">
+        <AppText className="py-10 text-center text-muted-foreground">
           {search
             ? "Nenhum produto encontrado para a busca."
             : "Nenhum produto encontrado."}
-        </Text>
+        </AppText>
       ) : (
         <View className="gap-4">
           {filteredProducts.map((product) => (
@@ -229,18 +230,21 @@ function ProductsContent() {
               />
               <CardHeader>
                 <CardTitle>{product.name}</CardTitle>
-                <Text
+                <AppText
                   numberOfLines={2}
                   className="text-sm text-muted-foreground"
                 >
                   {product.description}
-                </Text>
+                </AppText>
               </CardHeader>
               <CardContent>
                 <View className="flex-row items-center justify-between">
-                  <Text className="text-lg font-semibold text-foreground">
+                  <AppText
+                    weight="semibold"
+                    className="text-lg text-foreground"
+                  >
                     {priceFormatter.format(product.price)}
-                  </Text>
+                  </AppText>
                   <View className="flex-row gap-2">
                     <Button
                       variant="outline"
@@ -259,9 +263,9 @@ function ProductsContent() {
                   </View>
                 </View>
                 {product.category && (
-                  <Text className="mt-2 text-xs text-muted-foreground">
+                  <AppText className="mt-2 text-xs text-muted-foreground">
                     Categoria: {product.category.name}
-                  </Text>
+                  </AppText>
                 )}
               </CardContent>
             </Card>
@@ -335,14 +339,14 @@ function ProductsContent() {
                       : "border-input bg-card",
                   )}
                 >
-                  <Text
+                  <AppText
                     className={cn(
                       "text-sm",
                       active ? "text-primary-foreground" : "text-foreground",
                     )}
                   >
                     {category.name}
-                  </Text>
+                  </AppText>
                 </Pressable>
               );
             })}

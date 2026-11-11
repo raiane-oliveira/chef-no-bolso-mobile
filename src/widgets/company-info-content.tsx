@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Linking,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Linking, Pressable, ScrollView, View } from "react-native";
 import {
   CreditCardIcon,
   MoneyIcon,
@@ -14,14 +7,7 @@ import {
   PixLogoIcon,
   WhatsappLogoIcon,
 } from "phosphor-react-native";
-
-const colors = {
-  background: "#0a0a0a",
-  foreground: "#fafafa",
-  border: "#262626",
-  input: "rgba(255,255,255,0.08)",
-  muted: "#a3a3a3",
-};
+import { AppText } from "@/shared/ui/app-text";
 
 type TabKey = "about" | "schedule" | "payment";
 
@@ -54,11 +40,12 @@ const paymentMethods = [
 
 export function CompanyInfoContent() {
   const [activeTab, setActiveTab] = useState<TabKey>("about");
-  const today = new Date().getDay(); // 0 (Domingo) a 6 (Sábado)
+  const today = new Date().getDay();
 
   return (
-    <View style={styles.root}>
-      <View style={styles.tabsList}>
+    <View className="w-full">
+      {/* Tabs */}
+      <View className="w-full flex-row border-b border-border">
         {tabs.map((tab) => {
           const isActive = tab.value === activeTab;
 
@@ -68,81 +55,104 @@ export function CompanyInfoContent() {
               accessibilityRole="tab"
               accessibilityState={{ selected: isActive }}
               onPress={() => setActiveTab(tab.value)}
-              style={[styles.tabTrigger, isActive && styles.tabTriggerActive]}
+              className={`flex-1 items-center border-b-2 py-2.5 ${
+                isActive ? "border-foreground" : "border-transparent"
+              }`}
             >
-              <Text
-                style={[styles.tabLabel, isActive && styles.tabLabelActive]}
+              <AppText
+                weight="medium"
+                className={`text-sm ${
+                  isActive ? "text-foreground" : "text-muted-foreground"
+                }`}
               >
                 {tab.label}
-              </Text>
+              </AppText>
             </Pressable>
           );
         })}
       </View>
 
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerClassName="pb-4">
+        {/* About */}
         {activeTab === "about" && (
-          <View style={styles.aboutContent}>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Contato</Text>
-              <View style={styles.row}>
+          <View className="min-h-[344px] gap-4 px-6 pt-4">
+            <View className="gap-2">
+              <AppText weight="semibold" className="text-lg text-foreground">
+                Contato
+              </AppText>
+
+              <View className="flex-row text-sea-ink flex-wrap gap-4">
                 <Pressable
-                  style={styles.outlineButton}
                   onPress={() => Linking.openURL("https://wa.me/5583999999999")}
+                  className="flex-row items-center gap-2 rounded-md border border-border px-4 py-2.5"
                 >
-                  <WhatsappLogoIcon size={18} color={colors.foreground} />
-                  <Text style={styles.buttonText}>(83) 9 9999-9999</Text>
+                  <WhatsappLogoIcon size={18} color="currentColor" />
+                  <AppText weight="medium" className="text-sm">
+                    (83) 9 9999-9999
+                  </AppText>
                 </Pressable>
 
                 <Pressable
-                  style={styles.outlineButton}
                   onPress={() => Linking.openURL("tel:+5583999999999")}
+                  className="flex-row items-center gap-2 rounded-md border border-border px-4 py-2.5"
                 >
-                  <PhoneCallIcon
-                    size={18}
-                    weight="fill"
-                    color={colors.foreground}
-                  />
-                  <Text style={styles.buttonText}>(83) 9 9999-9999</Text>
+                  <PhoneCallIcon size={18} weight="fill" />
+                  <AppText weight="medium" className="text-sm">
+                    (83) 9 9999-9999
+                  </AppText>
                 </Pressable>
               </View>
             </View>
 
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Endereço</Text>
+            <View className="gap-2">
+              <AppText weight="semibold" className="text-lg text-foreground">
+                Endereço
+              </AppText>
+
               <View>
-                <Text style={styles.text}>R. Odon Bezerra, 300</Text>
-                <Text style={styles.text}>Liberdade, Campina Grande - PB</Text>
+                <AppText className="text-base text-foreground">
+                  R. Odon Bezerra, 300
+                </AppText>
+                <AppText className="text-base text-foreground">
+                  Liberdade, Campina Grande - PB
+                </AppText>
               </View>
             </View>
           </View>
         )}
 
+        {/* Schedule */}
         {activeTab === "schedule" && (
-          <View style={styles.scheduleContent}>
-            {disponibilities.map((disponibility, i) => (
+          <View className="w-full px-4 pt-2">
+            {disponibilities.map((disponibility, index) => (
               <View
                 key={disponibility.dayName}
-                style={[
-                  styles.scheduleItem,
-                  i === today && styles.scheduleItemActive,
-                ]}
+                className={`w-full flex-row justify-between rounded-md p-3 ${
+                  index === today ? "bg-input/50" : ""
+                }`}
               >
-                <Text style={styles.text}>{disponibility.dayName}</Text>
-                <Text style={[styles.text, styles.medium]}>
+                <AppText className="text-base text-foreground">
+                  {disponibility.dayName}
+                </AppText>
+
+                <AppText weight="medium" className="text-base text-foreground">
                   {disponibility.hour}
-                </Text>
+                </AppText>
               </View>
             ))}
           </View>
         )}
 
+        {/* Payment */}
         {activeTab === "payment" && (
-          <View style={styles.paymentContent}>
+          <View className="min-h-[344px] flex-row flex-wrap content-start items-start justify-center gap-4 px-4 pt-4">
             {paymentMethods.map(({ label, Icon, weight }) => (
-              <View key={label} style={styles.paymentItem}>
-                <Icon size={18} weight={weight} color={colors.foreground} />
-                <Text style={styles.text}>{label}</Text>
+              <View
+                key={label}
+                className="flex-row items-center text-sea-ink gap-2.5 rounded bg-input/50 px-4 py-2"
+              >
+                <Icon size={18} weight={weight} />
+                <AppText className="text-base text-sea-ink">{label}</AppText>
               </View>
             ))}
           </View>
@@ -151,112 +161,3 @@ export function CompanyInfoContent() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    width: "100%",
-  },
-  tabsList: {
-    flexDirection: "row",
-    width: "100%",
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  tabTrigger: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: 10,
-    borderBottomWidth: 2,
-    borderBottomColor: "transparent",
-  },
-  tabTriggerActive: {
-    borderBottomColor: colors.foreground,
-  },
-  tabLabel: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: colors.muted,
-  },
-  tabLabelActive: {
-    color: colors.foreground,
-  },
-  content: {
-    paddingBottom: 16,
-  },
-  aboutContent: {
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    minHeight: 344,
-    gap: 16,
-  },
-  section: {
-    gap: 8,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: colors.foreground,
-  },
-  row: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 16,
-  },
-  outlineButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  buttonText: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: colors.foreground,
-  },
-  text: {
-    fontSize: 16,
-    color: colors.foreground,
-  },
-  medium: {
-    fontWeight: "500",
-  },
-  scheduleContent: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    width: "100%",
-  },
-  scheduleItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 12,
-    borderRadius: 6,
-    width: "100%",
-  },
-  scheduleItemActive: {
-    backgroundColor: colors.input,
-  },
-  paymentContent: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    alignContent: "flex-start",
-    gap: 16,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    minHeight: 344,
-  },
-  paymentItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 4,
-    backgroundColor: colors.input,
-  },
-});

@@ -3,7 +3,8 @@ import { Screen } from "@/shared/ui/screen";
 import { Card } from "@/shared/ui/card";
 import { useRouter } from "expo-router";
 import { Bike, ChevronRight, Package } from "lucide-react-native";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
+import { AppText } from "@/shared/ui/app-text";
 
 export default function AdminHome() {
   const router = useRouter();
@@ -21,9 +22,12 @@ export default function AdminHome() {
             <Card>
               <View className="flex-row items-center gap-3 p-4">
                 <Icon size={22} color="#18181b" />
-                <Text className="flex-1 text-base font-medium text-foreground">
+                <AppText
+                  weight="medium"
+                  className="flex-1 text-base text-foreground"
+                >
                   {label}
-                </Text>
+                </AppText>
                 <ChevronRight size={20} color="#71717a" />
               </View>
             </Card>

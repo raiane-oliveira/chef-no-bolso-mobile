@@ -1,8 +1,8 @@
 import { useAuthContext } from "@/features/auth/model/authentication-context";
 import { SignInCard } from "@/features/auth/ui/sign-in-card";
+import { AppText } from "@/shared/ui/app-text";
 import { Screen } from "@/shared/ui/screen";
 import type { ReactNode } from "react";
-import { Text } from "react-native";
 
 type Props = {
   role: string; // 'ADMIN' | 'DELIVERY'
@@ -17,7 +17,9 @@ export function RoleGate({ role, title, safeTop = false, children }: Props) {
   if (!session) {
     return (
       <Screen safeTop={safeTop} className="items-center">
-        <Text className="text-2xl font-semibold text-foreground">{title}</Text>
+        <AppText weight="semibold" className="text-2xl text-foreground">
+          {title}
+        </AppText>
         <SignInCard />
       </Screen>
     );
@@ -26,12 +28,12 @@ export function RoleGate({ role, title, safeTop = false, children }: Props) {
   if (session.role !== role) {
     return (
       <Screen safeTop={safeTop} className="items-center">
-        <Text className="text-2xl font-semibold text-foreground">
+        <AppText weight="semibold" className="text-2xl text-foreground">
           Acesso negado
-        </Text>
-        <Text className="text-muted-foreground">
+        </AppText>
+        <AppText className="text-muted-foreground">
           Você não tem permissão para acessar esta página.
-        </Text>
+        </AppText>
       </Screen>
     );
   }

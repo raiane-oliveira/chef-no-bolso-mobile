@@ -9,7 +9,6 @@ import {
   Platform,
   Pressable,
   ScrollView,
-  Text,
   TextInput,
   View,
 } from "react-native";
@@ -17,6 +16,7 @@ import { useShoppingCartContext } from "../model/shopping-cart-context";
 import { InputUpdateOrderCartAmount } from "./input-update-order-cart-amount";
 import { Label } from "@/shared/ui/label";
 import { Button } from "@/shared/ui/button";
+import { AppText } from "@/shared/ui/app-text";
 
 const MAX_OBSERVATION_LENGTH = 140;
 
@@ -98,23 +98,23 @@ function AddToCartForm({
         </View>
 
         <View className="-mt-8 flex-1 rounded-t-2xl bg-card p-4">
-          <Text className="text-lg font-semibold text-foreground">
+          <AppText className="text-lg font-semibold text-foreground">
             {product.name}
-          </Text>
-          <Text className="mb-6 mt-3 text-sm text-muted-foreground">
+          </AppText>
+          <AppText className="mb-6 mt-3 text-sm text-muted-foreground">
             {product.description}
-          </Text>
+          </AppText>
 
-          <Text className="mb-4 text-base text-foreground">
+          <AppText className="mb-4 text-base text-foreground">
             {priceFormatter.format(product.price)}
-          </Text>
+          </AppText>
 
           <View className="mt-auto gap-2">
             <View className="flex-row items-center justify-between gap-2">
               <Label>Alguma observação?</Label>
-              <Text className="text-sm text-muted-foreground">
+              <AppText className="text-sm text-muted-foreground">
                 {observation.length} / {MAX_OBSERVATION_LENGTH}
-              </Text>
+              </AppText>
             </View>
             <TextInput
               multiline
@@ -140,9 +140,9 @@ function AddToCartForm({
           onPress={handleAddToCart}
         >
           {orderInCart ? "Atualizar" : "Adicionar"}
-          <Text className="text-sm font-medium text-primary-foreground">
+          <AppText className="text-sm font-medium text-primary-foreground">
             {priceFormatter.format(product.price * amount)}
-          </Text>
+          </AppText>
         </Button>
       </View>
     </KeyboardAvoidingView>

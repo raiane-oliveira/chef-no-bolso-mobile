@@ -1,7 +1,8 @@
 import type { ComponentType } from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable } from "react-native";
 import type { IconProps } from "phosphor-react-native";
 import { useRouter } from "expo-router";
+import { AppText } from "./app-text";
 
 interface NavLinkProps {
   to: string;
@@ -44,18 +45,19 @@ export function NavLink({
       <Icon
         size={size === "sm" ? 20 : 24}
         weight={isActive ? "fill" : "bold"}
-        color={variant === "active" ? "#F5E9D0" : "#315C50"}
+        color={variant === "active" ? "#f0ebe3" : "#8c3e22"}
       />
 
-      <Text
+      <AppText
+        weight="medium"
         className={[
-          "text-center font-medium",
+          "text-center",
           size === "sm" ? "text-xs" : "text-sm",
           variant === "active" ? "text-sand" : "text-lagoon-deep",
         ].join(" ")}
       >
         {label}
-      </Text>
+      </AppText>
     </Pressable>
   );
 }

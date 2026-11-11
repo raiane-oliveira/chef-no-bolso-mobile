@@ -43,7 +43,7 @@ export function InputUpdateOrderCartAmount({
     <View
       {...props}
       className={cn(
-        "w-full max-w-28 flex-row items-center justify-between rounded-sm bg-muted",
+        "w-full max-w-28 h-full flex-row items-center justify-between rounded-sm bg-muted",
         compact && "max-w-24",
         className,
       )}
@@ -71,7 +71,7 @@ export function InputUpdateOrderCartAmount({
         maxLength={5}
         selectTextOnFocus
         className={cn(
-          "min-w-8 flex-1 p-0 text-center text-sm text-foreground",
+          "min-w-8 font-sans flex-1 p-0 text-center text-sm text-foreground",
           compact && "text-xs",
         )}
       />

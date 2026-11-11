@@ -5,7 +5,8 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
-import { Text, View, type ViewProps } from "react-native";
+import { View, type ViewProps } from "react-native";
+import { AppText } from "./app-text";
 
 export interface CardProps extends ViewProps {
   className?: string;
@@ -19,7 +20,7 @@ function Card({ className, ...props }: CardProps) {
   return (
     <View
       className={cn(
-        "flex-col gap-6 rounded-xl border bg-card py-6 shadow-sm",
+        "flex-col gap-6 rounded-xl border border-border bg-card py-6 shadow-sm",
         className,
       )}
       {...props}
@@ -62,13 +63,11 @@ function CardHeader({
 function CardTitle({
   className,
   ...props
-}: ComponentProps<typeof Text> & { className?: string }) {
+}: ComponentProps<typeof AppText> & { className?: string }) {
   return (
-    <Text
-      className={cn(
-        "font-semibold leading-none text-card-foreground",
-        className,
-      )}
+    <AppText
+      weight="semibold"
+      className={cn("leading-none text-card-foreground", className)}
       {...props}
     />
   );
@@ -77,9 +76,9 @@ function CardTitle({
 function CardDescription({
   className,
   ...props
-}: ComponentProps<typeof Text> & { className?: string }) {
+}: ComponentProps<typeof AppText> & { className?: string }) {
   return (
-    <Text
+    <AppText
       className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />

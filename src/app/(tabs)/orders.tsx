@@ -8,7 +8,8 @@ import { DateRangeFilter } from "@/shared/ui/date-range-filter";
 import { Screen } from "@/shared/ui/screen";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { AppText } from "@/shared/ui/app-text";
 
 export default function OrdersScreen() {
   const { session } = useAuthContext();
@@ -41,9 +42,9 @@ export default function OrdersScreen() {
 
   return (
     <Screen className={session ? undefined : "items-center"}>
-      <Text className="text-2xl font-semibold text-foreground">
+      <AppText weight="semibold" className="text-2xl text-foreground">
         {session?.role === "ADMIN" ? "Todos os pedidos" : "Seus pedidos"}
-      </Text>
+      </AppText>
 
       {!session ? (
         <SignInCard />
@@ -58,15 +59,15 @@ export default function OrdersScreen() {
           />
 
           {isLoading ? (
-            <Text className="py-10 text-center text-foreground">
+            <AppText className="py-10 text-center text-foreground">
               Carregando pedidos...
-            </Text>
+            </AppText>
           ) : filteredOrders.length === 0 ? (
-            <Text className="py-10 text-center text-muted-foreground">
+            <AppText className="py-10 text-center text-muted-foreground">
               {startDate || endDate
                 ? "Nenhum pedido encontrado para o período selecionado."
                 : "Nenhum pedido encontrado."}
-            </Text>
+            </AppText>
           ) : (
             <View className="gap-4">
               {filteredOrders.map((order) => (

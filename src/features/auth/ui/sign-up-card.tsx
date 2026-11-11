@@ -1,5 +1,6 @@
 import { API_URL } from "@/shared/config/env";
 import { cn } from "@/shared/lib/utils";
+import { AppText } from "@/shared/ui/app-text";
 import { Button } from "@/shared/ui/button";
 import {
   Card,
@@ -13,7 +14,7 @@ import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
 import { Link, useRouter } from "expo-router";
 import { useRef, useState } from "react";
-import { Text, TextInputInstance, View } from "react-native";
+import { TextInputInstance, View } from "react-native";
 
 export function SignUpCard() {
   const router = useRouter();
@@ -135,7 +136,7 @@ export function SignUpCard() {
           </View>
 
           {error ? (
-            <Text className="text-sm text-destructive">{error}</Text>
+            <AppText className="text-sm text-destructive">{error}</AppText>
           ) : null}
         </View>
       </CardContent>
@@ -151,7 +152,11 @@ export function SignUpCard() {
         </Button>
 
         <Link href="/auth/login" asChild>
-          <Button variant="link" className="w-full" textClassName="font-normal">
+          <Button
+            variant="link"
+            className="w-full"
+            textClassName="no-underline"
+          >
             Já possui uma conta? Faça login
           </Button>
         </Link>

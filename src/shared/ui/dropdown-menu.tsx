@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import { Modal, Pressable, Text, View, type ViewStyle } from "react-native";
+import { Modal, Pressable, View, type ViewStyle } from "react-native";
+import { AppText } from "./app-text";
 
 interface DropdownMenuContextValue {
   open: boolean;
@@ -152,9 +153,9 @@ interface DropdownMenuLabelProps {
 
 function DropdownMenuLabel({ children }: DropdownMenuLabelProps) {
   return (
-    <Text className="px-3 py-2 text-sm font-semibold text-gray-700">
+    <AppText weight="semibold" className="px-3 py-2 text-sm text-gray-700">
       {children}
-    </Text>
+    </AppText>
   );
 }
 

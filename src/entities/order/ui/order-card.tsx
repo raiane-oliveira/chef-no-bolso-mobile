@@ -1,7 +1,7 @@
 import { Image } from "expo-image";
 import { ChevronDown, ChevronUp } from "lucide-react-native";
 import type { ReactNode } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { priceFormatter } from "@/shared/lib/formatters";
 import { cn } from "@/shared/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
@@ -11,6 +11,7 @@ import {
   statusLabels,
   type Order,
 } from "../model/types";
+import { AppText } from "@/shared/ui/app-text";
 
 function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString("pt-BR", {
@@ -50,18 +51,18 @@ export function OrderCard({
             <View className="flex-row flex-wrap items-center gap-2">
               <CardTitle>Pedido #{order.id.slice(-6).toUpperCase()}</CardTitle>
               <View className={cn("rounded-full px-2 py-0.5", status.bg)}>
-                <Text className={cn("text-xs font-medium", status.text)}>
+                <AppText weight="medium" className={cn("text-xs", status.text)}>
                   {statusLabels[order.status]}
-                </Text>
+                </AppText>
               </View>
             </View>
-            <Text className="text-sm text-muted-foreground">
+            <AppText className="text-sm text-muted-foreground">
               {formatDate(order.createdAt)}
-            </Text>
+            </AppText>
             {showUser && order.user && (
-              <Text className="text-sm text-foreground">
+              <AppText className="text-sm text-foreground">
                 {order.user.name} ({order.user.email})
-              </Text>
+              </AppText>
             )}
           </View>
 
@@ -82,13 +83,15 @@ export function OrderCard({
         </View>
 
         <View className="mt-2 flex-row flex-wrap gap-4">
-          <Text className="text-sm text-muted-foreground">
+          <AppText className="text-sm text-muted-foreground">
             {deliveryTypeLabels[order.deliveryType]}
-          </Text>
-          <Text className="text-sm text-muted-foreground">{itemsLabel}</Text>
-          <Text className="text-sm font-medium text-foreground">
+          </AppText>
+          <AppText className="text-sm text-muted-foreground">
+            {itemsLabel}
+          </AppText>
+          <AppText weight="medium" className="text-sm text-foreground">
             {priceFormatter.format(order.total)}
-          </Text>
+          </AppText>
         </View>
 
         {actions ? (
@@ -99,7 +102,9 @@ export function OrderCard({
       {expanded && (
         <CardContent>
           <View className="gap-3 border-t border-border pt-4">
-            <Text className="font-medium text-foreground">Itens do pedido</Text>
+            <AppText weight="medium" className="text-foreground">
+              Itens do pedido
+            </AppText>
 
             <View className="gap-2">
               {order.items.map((item, index) => (
@@ -115,18 +120,21 @@ export function OrderCard({
                     accessibilityLabel={item.name}
                   />
                   <View className="flex-1">
-                    <Text className="text-sm font-medium text-foreground">
+                    <AppText
+                      weight="medium"
+                      className="text-sm text-foreground"
+                    >
                       {item.name}
-                    </Text>
-                    <Text className="text-xs text-muted-foreground">
+                    </AppText>
+                    <AppText className="text-xs text-muted-foreground">
                       {`${item.quantity}x ${priceFormatter.format(item.price)}${
                         item.observation ? ` • ${item.observation}` : ""
                       }`}
-                    </Text>
+                    </AppText>
                   </View>
-                  <Text className="text-sm font-medium text-foreground">
+                  <AppText weight="medium" className="text-sm text-foreground">
                     {priceFormatter.format(item.price * item.quantity)}
-                  </Text>
+                  </AppText>
                 </View>
               ))}
             </View>
@@ -150,20 +158,26 @@ export function OrderCard({
                 />
               )}
               <View className="flex-row justify-between pt-1">
-                <Text className="text-base font-semibold text-foreground">
+                <AppText
+                  weight="semibold"
+                  className="text-base text-foreground"
+                >
                   Total
-                </Text>
-                <Text className="text-base font-semibold text-foreground">
+                </AppText>
+                <AppText
+                  weight="semibold"
+                  className="text-base text-foreground"
+                >
                   {priceFormatter.format(order.total)}
-                </Text>
+                </AppText>
               </View>
             </View>
 
             {order.deliveryAddress && (
-              <Text className="text-sm text-foreground">
-                <Text className="text-muted-foreground">Endereço: </Text>
+              <AppText className="text-sm text-foreground">
+                <AppText className="text-muted-foreground">Endereço: </AppText>
                 {order.deliveryAddress}
-              </Text>
+              </AppText>
             )}
           </View>
         </CardContent>
@@ -183,10 +197,12 @@ function Row({
 }) {
   return (
     <View className="flex-row justify-between">
-      <Text className={cn("text-sm text-muted-foreground", className)}>
+      <AppText className={cn("text-sm text-muted-foreground", className)}>
         {label}
-      </Text>
-      <Text className={cn("text-sm text-foreground", className)}>{value}</Text>
+      </AppText>
+      <AppText className={cn("text-sm text-foreground", className)}>
+        {value}
+      </AppText>
     </View>
   );
 }

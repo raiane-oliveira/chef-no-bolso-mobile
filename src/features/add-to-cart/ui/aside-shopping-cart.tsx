@@ -12,13 +12,7 @@ import {
   type LucideIcon,
 } from "lucide-react-native";
 import { useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
+import { Pressable, ScrollView, View, type ViewProps } from "react-native";
 import {
   useShoppingCartContext,
   type DeliveryType,
@@ -26,6 +20,7 @@ import {
 import { AddToCartDialogContent } from "./add-to-cart-dialog-content";
 import { InputUpdateOrderCartAmount } from "./input-update-order-cart-amount";
 import { Button } from "@/shared/ui/button";
+import { AppText } from "@/shared/ui/app-text";
 
 export interface AsideShoppingCartProps extends ViewProps {
   className?: string;
@@ -117,18 +112,21 @@ export function AsideShoppingCart({
           <View className="flex-1 flex-row items-center gap-3">
             <selectedDelivery.icon size={24} color={MUTED_ICON_COLOR} />
             <View className="flex-1">
-              <Text className="text-[13px] font-medium text-foreground">
+              <AppText weight="medium" className="text-[13px] text-foreground">
                 {selectedDelivery.selectedLabel}
-              </Text>
-              <Text className="text-xs font-light text-muted-foreground">
+              </AppText>
+              <AppText weight="light" className="text-xs text-muted-foreground">
                 {selectedDelivery.selectedHint}
-              </Text>
+              </AppText>
             </View>
           </View>
         ) : (
-          <Text className="flex-1 text-[13px] font-medium text-muted-foreground">
+          <AppText
+            weight="medium"
+            className="flex-1 text-[13px] text-muted-foreground"
+          >
             Calcular taxa e tempo de entrega
-          </Text>
+          </AppText>
         )}
         <ChevronRight size={16} color={MUTED_ICON_COLOR} />
       </Pressable>
@@ -139,18 +137,23 @@ export function AsideShoppingCart({
         {isEmpty ? (
           <View className="flex-1 items-center justify-center py-8">
             <ShoppingBag size={64} color={MUTED_ICON_COLOR} />
-            <Text className="mt-2 text-lg text-muted-foreground">
+            <AppText className="mt-2 text-lg text-muted-foreground">
               Sacola vazia
-            </Text>
+            </AppText>
           </View>
         ) : (
           <View className="p-4">
             <View className="flex-row items-center justify-between">
-              <Text className="font-medium text-foreground">Sua sacola</Text>
+              <AppText weight="medium" className="text-foreground">
+                Sua sacola
+              </AppText>
               <Pressable onPress={() => clearCart()} hitSlop={8}>
-                <Text className="text-xs font-medium uppercase text-foreground">
+                <AppText
+                  weight="medium"
+                  className="text-xs uppercase text-foreground"
+                >
                   Limpar
-                </Text>
+                </AppText>
               </Pressable>
             </View>
 
@@ -163,12 +166,15 @@ export function AsideShoppingCart({
                   >
                     <View className="flex-1 justify-between gap-2">
                       <View className="flex-row items-center gap-1.5">
-                        <Text className="text-sm font-semibold text-foreground">
+                        <AppText
+                          weight="semibold"
+                          className="text-sm text-foreground"
+                        >
                           {order.amountInShoppingCart}x
-                        </Text>
-                        <Text className="flex-1 text-sm text-foreground">
+                        </AppText>
+                        <AppText className="flex-1 text-sm text-foreground">
                           {order.name}
-                        </Text>
+                        </AppText>
                       </View>
 
                       <View className="flex-row items-center gap-1.5">
@@ -184,19 +190,22 @@ export function AsideShoppingCart({
                           hitSlop={8}
                           className="pl-2"
                         >
-                          <Text className="text-xs text-muted-foreground">
+                          <AppText className="text-xs text-muted-foreground">
                             Remover
-                          </Text>
+                          </AppText>
                         </Pressable>
                       </View>
                     </View>
 
                     <View className="items-end gap-2">
-                      <Text className="text-sm font-medium text-foreground">
+                      <AppText
+                        weight="medium"
+                        className="text-sm text-foreground"
+                      >
                         {priceFormatter.format(
                           order.price * order.amountInShoppingCart,
                         )}
-                      </Text>
+                      </AppText>
                       <Image
                         source={{ uri: order.imgUrl }}
                         contentFit="cover"
@@ -231,28 +240,46 @@ export function AsideShoppingCart({
           <Divider />
           <View className="gap-1 bg-card px-4 py-2.5">
             <View className="flex-row items-center justify-between gap-1">
-              <Text className="text-[13px] font-light text-muted-foreground">
+              <AppText
+                weight="light"
+                className="text-[13px] font-light text-muted-foreground"
+              >
                 Subtotal
-              </Text>
-              <Text className="text-[13px] font-light text-muted-foreground">
+              </AppText>
+              <AppText
+                weight="light"
+                className="text-[13px] font-light text-muted-foreground"
+              >
                 {priceFormatter.format(subtotal)}
-              </Text>
+              </AppText>
             </View>
             <View className="flex-row items-center justify-between gap-1">
-              <Text className="text-[13px] font-light text-muted-foreground">
+              <AppText
+                weight="light"
+                className="text-[13px] font-light text-muted-foreground"
+              >
                 Taxa de entrega
-              </Text>
-              <Text className="text-[13px] font-light text-muted-foreground">
+              </AppText>
+              <AppText
+                weight="light"
+                className="text-[13px] font-light text-muted-foreground"
+              >
                 {priceFormatter.format(taxDelivery)}
-              </Text>
+              </AppText>
             </View>
             <View className="flex-row items-center justify-between gap-1">
-              <Text className="text-base font-medium text-foreground">
+              <AppText
+                weight="medium"
+                className="text-base font-medium text-foreground"
+              >
                 Total
-              </Text>
-              <Text className="text-base font-medium text-foreground">
+              </AppText>
+              <AppText
+                weight="medium"
+                className="text-base font-medium text-foreground"
+              >
                 {priceFormatter.format(total)}
-              </Text>
+              </AppText>
             </View>
           </View>
         </>
@@ -267,12 +294,18 @@ export function AsideShoppingCart({
         <View className="flex-1 flex-row items-center gap-3">
           <BadgePercent size={24} color={MUTED_ICON_COLOR} />
           <View>
-            <Text className="text-[13px] font-bold text-muted-foreground">
+            <AppText
+              weight="bold"
+              className="text-[13px] font-bold text-muted-foreground"
+            >
               Que tal usar um cupom?
-            </Text>
-            <Text className="text-[13px] font-light text-muted-foreground">
+            </AppText>
+            <AppText
+              weight="light"
+              className="text-[13px] font-light text-muted-foreground"
+            >
               1 disponível
-            </Text>
+            </AppText>
           </View>
         </View>
         <ChevronRight size={16} color={MUTED_ICON_COLOR} />
@@ -308,12 +341,12 @@ export function AsideShoppingCart({
               >
                 <option.icon size={24} color={MUTED_ICON_COLOR} />
                 <View className="flex-1">
-                  <Text className="text-sm text-foreground">
+                  <AppText className="text-sm text-foreground">
                     {option.label}
-                  </Text>
-                  <Text className="text-xs text-muted-foreground">
+                  </AppText>
+                  <AppText className="text-xs text-muted-foreground">
                     {option.hint}
-                  </Text>
+                  </AppText>
                 </View>
               </Pressable>
             );

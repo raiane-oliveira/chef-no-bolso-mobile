@@ -9,8 +9,9 @@ import { Screen } from "@/shared/ui/screen";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CircleCheck } from "lucide-react-native";
 import { useMemo, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Alert, View } from "react-native";
 import { Button } from "@/shared/ui/button";
+import { AppText } from "@/shared/ui/app-text";
 
 export default function DeliveriesScreen() {
   return (
@@ -95,9 +96,9 @@ function DeliveriesContent() {
 
   return (
     <Screen>
-      <Text className="text-2xl font-semibold text-foreground">
+      <AppText weight="semibold" className="text-2xl text-foreground">
         Suas entregas
-      </Text>
+      </AppText>
 
       <View className="flex-row items-center gap-2">
         <Button
@@ -130,17 +131,17 @@ function DeliveriesContent() {
       )}
 
       {isLoading ? (
-        <Text className="py-10 text-center text-foreground">
+        <AppText className="py-10 text-center text-foreground">
           Carregando pedidos...
-        </Text>
+        </AppText>
       ) : orders.length === 0 ? (
-        <Text className="py-10 text-center text-muted-foreground">
+        <AppText className="py-10 text-center text-muted-foreground">
           {tab === "ongoing"
             ? "Nenhuma entrega em andamento no momento."
             : startDate || endDate
               ? "Nenhum pedido encontrado para o período selecionado."
               : "Nenhum pedido encontrado."}
-        </Text>
+        </AppText>
       ) : (
         <View className="gap-4">
           {orders.map((order) => (

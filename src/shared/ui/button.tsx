@@ -1,7 +1,8 @@
 import { cn } from "@/shared/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Children, type ReactNode } from "react";
-import { Pressable, Text, type PressableProps } from "react-native";
+import { Pressable, type PressableProps } from "react-native";
+import { AppText, AppTextWeight } from "./app-text";
 
 const buttonVariants = cva(
   "shrink-0 flex-row items-center justify-center gap-2 rounded-md",
@@ -33,7 +34,7 @@ const buttonVariants = cva(
   },
 );
 
-const buttonTextVariants = cva("text-sm font-medium", {
+const buttonTextVariants = cva("text-sm", {
   variants: {
     variant: {
       default: "text-primary-foreground",
@@ -69,13 +70,17 @@ type ButtonProps = Omit<PressableProps, "children"> &
 
 function Button({
   className,
-  textClassName,
+  textClassName = "font-medium",
   variant = "default",
   size = "default",
   disabled,
   children,
   ...props
 }: ButtonProps) {
+  const fontWeight = textClassName
+    .replace(/font-[\w-]+/g, "")
+    .trim() as AppTextWeight;
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -90,11 +95,12 @@ function Button({
     >
       {Children.map(children, (child) =>
         typeof child === "string" || typeof child === "number" ? (
-          <Text
+          <AppText
+            weight={fontWeight}
             className={cn(buttonTextVariants({ variant, size }), textClassName)}
           >
             {child}
-          </Text>
+          </AppText>
         ) : (
           child
         ),

@@ -1,6 +1,7 @@
 import { useAuthContext } from "@/features/auth/model/authentication-context";
 import { RoleGate } from "@/features/auth/ui/role-gate";
 import { API_URL } from "@/shared/config/env";
+import { AppText } from "@/shared/ui/app-text";
 import { Button } from "@/shared/ui/button";
 import { Card } from "@/shared/ui/card";
 import { Input } from "@/shared/ui/input";
@@ -10,7 +11,7 @@ import { Sheet } from "@/shared/ui/sheet";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react-native";
 import { useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Alert, View } from "react-native";
 
 interface Deliverer {
   id: string;
@@ -129,26 +130,28 @@ function DeliverersContent() {
       </Button>
 
       {isLoading ? (
-        <Text className="py-10 text-center text-foreground">
+        <AppText className="py-10 text-center text-foreground">
           Carregando entregadores...
-        </Text>
+        </AppText>
       ) : deliverers.length === 0 ? (
-        <Text className="py-10 text-center text-muted-foreground">
+        <AppText className="py-10 text-center text-muted-foreground">
           Nenhum entregador encontrado.
-        </Text>
+        </AppText>
       ) : (
         <View className="gap-3">
           {deliverers.map((d) => (
             <Card key={d.id}>
               <View className="flex-row items-center justify-between gap-3 p-4">
                 <View className="flex-1">
-                  <Text className="font-medium text-foreground">{d.nome}</Text>
-                  <Text className="text-sm text-muted-foreground">
+                  <AppText weight="medium" className="text-foreground">
+                    {d.nome}
+                  </AppText>
+                  <AppText className="text-sm text-muted-foreground">
                     {d.email}
-                  </Text>
-                  <Text className="text-sm text-muted-foreground">
+                  </AppText>
+                  <AppText className="text-sm text-muted-foreground">
                     {d.telefone}
-                  </Text>
+                  </AppText>
                 </View>
                 <Button
                   variant="outline"

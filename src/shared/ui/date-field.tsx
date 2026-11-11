@@ -1,7 +1,8 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
-import { Platform, Pressable, Text, View } from "react-native";
+import { Platform, Pressable, View } from "react-native";
 import { Label } from "@/shared/ui/label";
+import { AppText } from "./app-text";
 
 function toISODate(d: Date) {
   const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -32,9 +33,11 @@ export function DateField({ label, value, onChange }: DateFieldProps) {
         onPress={() => setOpen((o) => !o)}
         className="h-10 justify-center rounded-md border border-input bg-card px-3"
       >
-        <Text className={value ? "text-foreground" : "text-muted-foreground"}>
+        <AppText
+          className={value ? "text-foreground" : "text-muted-foreground"}
+        >
           {value ? toDisplay(value) : "Selecionar"}
-        </Text>
+        </AppText>
       </Pressable>
 
       {open && (

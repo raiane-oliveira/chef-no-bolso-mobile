@@ -1,28 +1,26 @@
-import { X } from 'lucide-react-native'
-import type { ReactNode } from 'react'
+import { X } from "lucide-react-native";
+import type { ReactNode } from "react";
 import {
   KeyboardAvoidingView,
   Modal,
   Platform,
   Pressable,
   ScrollView,
-  Text,
   View,
-} from 'react-native'
+} from "react-native";
+import { AppText } from "./app-text";
 
 type SheetProps = {
-  visible: boolean
-  onClose: () => void
-  title: string
-  description?: string
-  icon?: ReactNode
-  footer?: ReactNode
-  /** false quando o conteúdo já tem scroll próprio */
-  scroll?: boolean
-  children: ReactNode
-}
+  visible: boolean;
+  onClose: () => void;
+  title: string;
+  description?: string;
+  icon?: ReactNode;
+  footer?: ReactNode;
+  scroll?: boolean;
+  children: ReactNode;
+};
 
-// Substitui Dialog/DialogContent/DialogHeader/DialogFooter do Radix
 export function Sheet({
   visible,
   onClose,
@@ -42,16 +40,20 @@ export function Sheet({
     >
       <KeyboardAvoidingView
         className="flex-1 bg-background"
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <View className="flex-row items-center justify-between border-b border-border bg-card p-4">
           <View className="flex-1 pr-3">
             <View className="flex-row items-center gap-2">
               {icon}
-              <Text className="text-xl font-semibold text-foreground">{title}</Text>
+              <AppText className="text-xl font-semibold text-foreground">
+                {title}
+              </AppText>
             </View>
             {description ? (
-              <Text className="mt-1 text-sm text-muted-foreground">{description}</Text>
+              <AppText className="mt-1 text-sm text-muted-foreground">
+                {description}
+              </AppText>
             ) : null}
           </View>
           <Pressable onPress={onClose} hitSlop={10} accessibilityLabel="Fechar">
@@ -77,5 +79,5 @@ export function Sheet({
         ) : null}
       </KeyboardAvoidingView>
     </Modal>
-  )
+  );
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { useRouter, usePathname } from "expo-router";
 import {
   HouseIcon,
@@ -21,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
+import { AppText } from "@/shared/ui/app-text";
 
 export function Navbar() {
   const { session, handleLogout } = useAuthContext();
@@ -47,7 +48,7 @@ export function Navbar() {
         />
 
         <NavLink
-          to="/search"
+          to="#"
           label="Pesquisar"
           icon={MagnifyingGlassIcon}
           active={isActive("/search")}
@@ -63,8 +64,10 @@ export function Navbar() {
         {session ? (
           <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
             <DropdownMenuTrigger className="w-20 flex-col items-center gap-1 rounded-md px-2 py-1">
-              <UserIcon size={20} weight="bold" color="#315C50" />
-              <Text className="text-xs text-lagoon-deep">Minha conta</Text>
+              <UserIcon size={20} weight="bold" />
+              <AppText className="text-xs text-lagoon-deep">
+                Minha conta
+              </AppText>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent align="end" className="w-52">
@@ -72,7 +75,7 @@ export function Navbar() {
                 <>
                   <DropdownMenuItem onPress={() => navigate("/account")}>
                     <UserCircleIcon size={18} />
-                    <Text>Meus dados</Text>
+                    <AppText>Meus dados</AppText>
                   </DropdownMenuItem>
 
                   <DropdownMenuItem
@@ -83,11 +86,11 @@ export function Navbar() {
                     }
                   >
                     <ListIcon size={18} />
-                    <Text>
+                    <AppText>
                       {session.role === "DELIVERY"
                         ? "Minhas entregas"
                         : "Meus pedidos"}
-                    </Text>
+                    </AppText>
                   </DropdownMenuItem>
                 </>
               )}
@@ -97,7 +100,7 @@ export function Navbar() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onPress={() => navigate("/admin/products")}>
                     <PackageIcon size={18} />
-                    <Text>Gerenciar produtos</Text>
+                    <AppText>Gerenciar produtos</AppText>
                   </DropdownMenuItem>
                 </>
               )}
@@ -106,7 +109,7 @@ export function Navbar() {
 
               <DropdownMenuItem onPress={handleLogout} destructive>
                 <SignOutIcon size={18} color="#DC2626" />
-                <Text className="text-red-600">Sair</Text>
+                <AppText className="text-red-600">Sair</AppText>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

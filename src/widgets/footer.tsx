@@ -1,21 +1,6 @@
+import { AppText } from "@/shared/ui/app-text";
 import { useState } from "react";
-import {
-  Image,
-  Linking,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-  type ViewProps,
-} from "react-native";
-
-const colors = {
-  line: "#262626",
-  muted: "#a3a3a3",
-  avatarBg: "#262626",
-  avatarBorder: "#0a0a0a",
-  foreground: "#fafafa",
-};
+import { Image, Linking, Pressable, View, type ViewProps } from "react-native";
 
 interface FooterProps extends ViewProps {}
 
@@ -25,7 +10,6 @@ interface Developer {
   fallback: string;
 }
 
-// TODO: adicionar nome dos devs
 const developers: Developer[] = [
   { username: "raiane-oliveira", name: "Raiane Oliveira", fallback: "RO" },
   { username: "kaio", name: "Kaio", fallback: "K?" },
@@ -49,15 +33,17 @@ function DeveloperAvatar({
       onPress={() =>
         Linking.openURL(`https://github.com/${developer.username}`)
       }
-      style={[styles.avatar, overlap && styles.avatarOverlap]}
+      className={`h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 border-bg-base bg-sea-ink ${overlap ? "-ml-2" : ""}`}
     >
       {failed ? (
-        <Text style={styles.avatarFallback}>{developer.fallback}</Text>
+        <AppText weight="medium" className="text-xs text-foam">
+          {developer.fallback}
+        </AppText>
       ) : (
         <Image
           source={{ uri: `https://github.com/${developer.username}.png` }}
           accessibilityLabel={`@${developer.username}`}
-          style={styles.avatarImage}
+          className="h-full w-full"
           onError={() => setFailed(true)}
         />
       )}
@@ -65,18 +51,24 @@ function DeveloperAvatar({
   );
 }
 
-export function Footer({ style, ...props }: FooterProps) {
+export function Footer({ className, ...props }: FooterProps) {
   const year = new Date().getFullYear();
 
   return (
-    <View {...props} style={[styles.footer, style]}>
-      <Text style={styles.copy}>
-        &copy; {year} ChefNoBolso. Todos os direitos reservados.
-      </Text>
+    <View
+      {...props}
+      className={`mt-20 items-center justify-between gap-4 border-t border-line px-4 py-7 ${className ?? ""}`}
+    >
+      <AppText className="text-sm text-muted-foreground text-center">
+        © {year} ChefNoBolso. Todos os direitos reservados.
+      </AppText>
 
-      <View style={styles.developedBy}>
-        <Text style={styles.copy}>Desenvolvido por</Text>
-        <View style={styles.avatarGroup}>
+      <View className="flex-row items-center gap-2">
+        <AppText className="text-sm text-muted-foreground">
+          Desenvolvido por
+        </AppText>
+
+        <View className="flex-row items-center">
           {developers.map((developer, index) => (
             <DeveloperAvatar
               key={developer.username}
@@ -89,52 +81,3 @@ export function Footer({ style, ...props }: FooterProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  footer: {
-    marginTop: 80,
-    borderTopWidth: 1,
-    borderTopColor: colors.line,
-    paddingHorizontal: 16,
-    paddingVertical: 28,
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 16,
-  },
-  copy: {
-    fontSize: 14,
-    color: colors.muted,
-    textAlign: "center",
-  },
-  developedBy: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  avatarGroup: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: colors.avatarBorder,
-    backgroundColor: colors.avatarBg,
-    alignItems: "center",
-    justifyContent: "center",
-    overflow: "hidden",
-  },
-  avatarOverlap: {
-    marginLeft: -8,
-  },
-  avatarImage: {
-    width: "100%",
-    height: "100%",
-  },
-  avatarFallback: {
-    fontSize: 12,
-    color: colors.foreground,
-  },
-});

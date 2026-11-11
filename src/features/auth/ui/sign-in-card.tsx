@@ -125,7 +125,11 @@ export function SignInCard() {
         </Button>
 
         <Link href="/auth/register" asChild>
-          <Button variant="link" className="w-full" textClassName="font-normal">
+          <Button
+            variant="link"
+            className="w-full"
+            textClassName="no-underline"
+          >
             Ainda não tem uma conta? Cadastre-se
           </Button>
         </Link>
