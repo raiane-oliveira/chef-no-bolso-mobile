@@ -99,7 +99,7 @@ export function OrderCard({
         ) : null}
       </CardHeader>
 
-      {expanded && (
+      {expanded ? (
         <CardContent>
           <View className="gap-3 border-t border-border pt-4">
             <AppText weight="medium" className="text-foreground">
@@ -181,7 +181,7 @@ export function OrderCard({
             )}
           </View>
         </CardContent>
-      )}
+      ) : null}
     </Card>
   );
 }

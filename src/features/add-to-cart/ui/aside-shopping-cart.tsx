@@ -17,10 +17,10 @@ import {
   useShoppingCartContext,
   type DeliveryType,
 } from "../model/shopping-cart-context";
-import { AddToCartDialogContent } from "./add-to-cart-dialog-content";
 import { InputUpdateOrderCartAmount } from "./input-update-order-cart-amount";
 import { Button } from "@/shared/ui/button";
 import { AppText } from "@/shared/ui/app-text";
+import { AddToCartModal } from "./add-to-cart-modal";
 
 export interface AsideShoppingCartProps extends ViewProps {
   className?: string;
@@ -97,11 +97,15 @@ export function AsideShoppingCart({
     });
     setIsDeliverySheetOpen(false);
   }
+  const editingOrder = orders.find((o) => o.id === editingOrderId) ?? null;
 
   return (
     <View
       {...props}
-      className={cn("flex-1 overflow-hidden rounded-md", className)}
+      className={cn(
+        "flex-1 border border-border overflow-hidden rounded-md",
+        className,
+      )}
     >
       <Pressable
         onPress={() => setIsDeliverySheetOpen(true)}
@@ -159,76 +163,61 @@ export function AsideShoppingCart({
 
             <View className="mt-4 gap-3">
               {orders.map((order) => (
-                <View key={order.id}>
-                  <Pressable
-                    onPress={() => setEditingOrderId(order.id)}
-                    className="flex-row justify-between gap-3 rounded-md bg-card p-3 active:opacity-90"
-                  >
-                    <View className="flex-1 justify-between gap-2">
-                      <View className="flex-row items-center gap-1.5">
-                        <AppText
-                          weight="semibold"
-                          className="text-sm text-foreground"
-                        >
-                          {order.amountInShoppingCart}x
-                        </AppText>
-                        <AppText className="flex-1 text-sm text-foreground">
-                          {order.name}
-                        </AppText>
-                      </View>
-
-                      <View className="flex-row items-center gap-1.5">
-                        <InputUpdateOrderCartAmount
-                          compact
-                          amount={order.amountInShoppingCart}
-                          setAmount={(newAmount) =>
-                            updateAmountInCart(order.id, newAmount)
-                          }
-                        />
-                        <Pressable
-                          onPress={() => clearCart(order.id)}
-                          hitSlop={8}
-                          className="pl-2"
-                        >
-                          <AppText className="text-xs text-muted-foreground">
-                            Remover
-                          </AppText>
-                        </Pressable>
-                      </View>
-                    </View>
-
-                    <View className="items-end gap-2">
+                <Pressable
+                  key={order.id}
+                  onPress={() => setEditingOrderId(order.id)}
+                  className="flex-row justify-between gap-3 rounded-md bg-card p-3 hover:bg-card/80 active:opacity-90"
+                >
+                  <View className="flex-1 justify-between gap-2">
+                    <View className="flex-row items-center gap-1.5">
                       <AppText
-                        weight="medium"
+                        weight="semibold"
                         className="text-sm text-foreground"
                       >
-                        {priceFormatter.format(
-                          order.price * order.amountInShoppingCart,
-                        )}
+                        {order.amountInShoppingCart}x
                       </AppText>
-                      <Image
-                        source={{ uri: order.imgUrl }}
-                        contentFit="cover"
-                        style={{ width: 56, height: 56, borderRadius: 4 }}
-                        accessibilityLabel={order.name}
-                      />
+                      <AppText className="flex-1 text-sm text-foreground">
+                        {order.name}
+                      </AppText>
                     </View>
-                  </Pressable>
 
-                  <AddToCartDialogContent
-                    product={{
-                      id: order.id,
-                      name: order.name,
-                      description: order.description,
-                      price: order.price,
-                      imageUrl: order.imgUrl,
-                    }}
-                    open={editingOrderId === order.id}
-                    onOpenChange={(open) =>
-                      setEditingOrderId(open ? order.id : null)
-                    }
-                  />
-                </View>
+                    <View className="flex-row items-center gap-1.5">
+                      <InputUpdateOrderCartAmount
+                        compact
+                        amount={order.amountInShoppingCart}
+                        setAmount={(newAmount) =>
+                          updateAmountInCart(order.id, newAmount)
+                        }
+                      />
+                      <Pressable
+                        onPress={() => clearCart(order.id)}
+                        hitSlop={8}
+                        className="pl-2"
+                      >
+                        <AppText className="text-xs text-muted-foreground">
+                          Remover
+                        </AppText>
+                      </Pressable>
+                    </View>
+                  </View>
+
+                  <View className="items-end gap-2">
+                    <AppText
+                      weight="medium"
+                      className="text-sm text-foreground"
+                    >
+                      {priceFormatter.format(
+                        order.price * order.amountInShoppingCart,
+                      )}
+                    </AppText>
+                    <Image
+                      source={{ uri: order.imgUrl }}
+                      contentFit="cover"
+                      style={{ width: 56, height: 56, borderRadius: 4 }}
+                      accessibilityLabel={order.name}
+                    />
+                  </View>
+                </Pressable>
               ))}
             </View>
           </View>
@@ -318,6 +307,22 @@ export function AsideShoppingCart({
           Estabelecimento fechado
         </Button>
       </View>
+
+      <AddToCartModal
+        open={editingOrderId !== null}
+        onOpenChange={(open) => {
+          if (!open) setEditingOrderId(null);
+        }}
+        product={
+          editingOrder && {
+            id: editingOrder.id,
+            name: editingOrder.name,
+            description: editingOrder.description,
+            price: editingOrder.price,
+            imageUrl: editingOrder.imgUrl,
+          }
+        }
+      />
 
       <Sheet
         visible={isDeliverySheetOpen}

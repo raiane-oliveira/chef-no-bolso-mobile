@@ -2,6 +2,7 @@ import { API_URL } from "@/shared/config/env";
 import type { ChildrenProps, Role } from "@/shared/lib/shared-types";
 import * as SecureStore from "expo-secure-store";
 import { createContext, useContext, useEffect, useState } from "react";
+import { storage } from "../lib/storage";
 
 export interface UserSession {
   accessToken: string;
@@ -74,7 +75,7 @@ export function AuthenticationContextProvider({ children }: ChildrenProps) {
   }, []);
 
   async function handleLogin(loginSession: UserSession) {
-    await SecureStore.setItemAsync(SESSION_KEY, JSON.stringify(loginSession));
+    await storage.setItem(SESSION_KEY, JSON.stringify(loginSession));
     setSession(loginSession);
   }
 

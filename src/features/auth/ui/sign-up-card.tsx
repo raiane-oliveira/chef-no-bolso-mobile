@@ -1,4 +1,5 @@
 import { API_URL } from "@/shared/config/env";
+import { formatPhone, validatePhone } from "@/shared/lib/formatters";
 import { cn } from "@/shared/lib/utils";
 import { AppText } from "@/shared/ui/app-text";
 import { Button } from "@/shared/ui/button";
@@ -21,7 +22,13 @@ export function SignUpCard() {
   const emailRef = useRef<TextInputInstance>(null);
   const passwordRef = useRef<TextInputInstance>(null);
   const passwordConfirmationRef = useRef<TextInputInstance>(null);
+  const phoneRef = useRef<TextInputInstance>(null);
 
+  const [phone, setPhone] = useState("");
+  const [phoneTouched, setPhoneTouched] = useState(false);
+
+  const phoneError = validatePhone(phone);
+  const showPhoneError = phoneTouched && !!phoneError;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,8 +43,20 @@ export function SignUpCard() {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
 
-    if (!trimmedName || !trimmedEmail || !password || !passwordConfirmation) {
+    if (
+      !trimmedName ||
+      !trimmedEmail ||
+      !phone ||
+      !password ||
+      !passwordConfirmation
+    ) {
       setError("Preencha todos os campos.");
+      return;
+    }
+
+    if (phoneError) {
+      setPhoneTouched(true);
+      setError(phoneError);
       return;
     }
 
@@ -49,12 +68,13 @@ export function SignUpCard() {
     setIsPending(true);
 
     try {
-      const response = await fetch(`${API_URL}/auth/register`, {
+      const response = await fetch(`${API_URL}/auth/register/customer`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: trimmedName,
           email: trimmedEmail,
+          phone: phone.replace(/\D/g, ""),
           password,
         }),
       });
@@ -107,8 +127,30 @@ export function SignUpCard() {
               onChangeText={setEmail}
               placeholder="johndoe@exemplo.com"
               returnKeyType="next"
-              onSubmitEditing={() => passwordRef.current?.focus()}
+              onSubmitEditing={() => phoneRef.current?.focus()}
             />
+          </View>
+
+          <View className="gap-2">
+            <Label>Telefone</Label>
+            <Input
+              ref={phoneRef}
+              value={phone}
+              onChangeText={(text) => setPhone(formatPhone(text))}
+              onBlur={() => setPhoneTouched(true)}
+              placeholder="(83) 99999-9999"
+              keyboardType="phone-pad"
+              autoComplete="tel"
+              maxLength={15}
+              returnKeyType="next"
+              onSubmitEditing={() => passwordRef.current?.focus()}
+              className={cn(showPhoneError && "border-destructive")}
+            />
+            {showPhoneError ? (
+              <AppText className="text-sm text-destructive">
+                {phoneError}
+              </AppText>
+            ) : null}
           </View>
 
           <View className="gap-2">

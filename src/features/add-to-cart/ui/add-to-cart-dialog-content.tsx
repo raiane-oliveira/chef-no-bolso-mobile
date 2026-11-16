@@ -5,7 +5,6 @@ import { X } from "lucide-react-native";
 import { useState } from "react";
 import {
   KeyboardAvoidingView,
-  Modal,
   Platform,
   Pressable,
   ScrollView,
@@ -17,36 +16,23 @@ import { InputUpdateOrderCartAmount } from "./input-update-order-cart-amount";
 import { Label } from "@/shared/ui/label";
 import { Button } from "@/shared/ui/button";
 import { AppText } from "@/shared/ui/app-text";
+import { cn } from "@/shared/lib/utils";
 
 const MAX_OBSERVATION_LENGTH = 140;
 
 interface AddToCartDialogContentProps {
   product: Product;
-  open: boolean;
   onOpenChange: (open: boolean) => void;
+  variant?: "sheet" | "dialog";
 }
 
 export function AddToCartDialogContent({
   product,
-  open,
   onOpenChange,
+  variant = "sheet",
 }: AddToCartDialogContentProps) {
-  return (
-    <Modal
-      visible={open}
-      animationType="slide"
-      presentationStyle="pageSheet"
-      onRequestClose={() => onOpenChange(false)}
-    >
-      <AddToCartForm product={product} onOpenChange={onOpenChange} />
-    </Modal>
-  );
-}
+  const isDialog = variant === "dialog";
 
-function AddToCartForm({
-  product,
-  onOpenChange,
-}: Omit<AddToCartDialogContentProps, "open">) {
   const { addToCart, orders } = useShoppingCartContext();
   const orderInCart = orders.find((o) => o.id === product.id);
 
@@ -69,21 +55,19 @@ function AddToCartForm({
     onOpenChange(false);
   }
 
-  return (
-    <KeyboardAvoidingView
-      className="flex-1 bg-muted"
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+  const body = (
+    <>
       <ScrollView
-        className="flex-1"
-        contentContainerStyle={{ flexGrow: 1 }}
+        // dialog: encolhe até o maxHeight da caixa; sheet: ocupa a tela toda
+        className={isDialog ? "shrink" : "flex-1"}
+        contentContainerStyle={isDialog ? undefined : { flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
         <View>
           <Image
             source={{ uri: product.imageUrl }}
             contentFit="cover"
-            style={{ width: "100%", height: 288 }}
+            style={{ width: "100%", height: isDialog ? 240 : 288 }}
             accessibilityLabel={product.name}
           />
           <Pressable
@@ -91,13 +75,18 @@ function AddToCartForm({
             accessibilityRole="button"
             accessibilityLabel="Fechar"
             hitSlop={8}
-            className="absolute right-4 top-4 rounded-full bg-card p-1"
+            className="absolute right-4 top-4 rounded-full bg-card p-1 hover:bg-muted"
           >
             <X size={20} color="#18181b" />
           </Pressable>
         </View>
 
-        <View className="-mt-8 flex-1 rounded-t-2xl bg-card p-4">
+        <View
+          className={cn(
+            "bg-card p-4",
+            isDialog ? "p-5" : "-mt-8 flex-1 rounded-t-2xl",
+          )}
+        >
           <AppText className="text-lg font-semibold text-foreground">
             {product.name}
           </AppText>
@@ -130,9 +119,10 @@ function AddToCartForm({
       </ScrollView>
 
       <View
-        className={`flex-row items-center justify-between gap-3 border-t border-muted bg-card px-4 pt-4 ${
-          Platform.OS === "ios" ? "pb-8" : "pb-4"
-        }`}
+        className={cn(
+          "flex-row items-center justify-between gap-3 border-t border-muted bg-card px-4 pt-4",
+          !isDialog && Platform.OS === "ios" ? "pb-8" : "pb-4",
+        )}
       >
         <InputUpdateOrderCartAmount amount={amount} setAmount={setAmount} />
         <Button
@@ -145,6 +135,19 @@ function AddToCartForm({
           </AppText>
         </Button>
       </View>
+    </>
+  );
+
+  if (isDialog) {
+    return <View className="shrink bg-card">{body}</View>;
+  }
+
+  return (
+    <KeyboardAvoidingView
+      className="flex-1 bg-muted"
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      {body}
     </KeyboardAvoidingView>
   );
 }

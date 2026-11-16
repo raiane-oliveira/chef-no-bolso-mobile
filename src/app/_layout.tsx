@@ -16,6 +16,7 @@ import {
   Rubik_600SemiBold,
   Rubik_700Bold,
 } from "@expo-google-fonts/rubik";
+import { useIsDesktop } from "@/shared/hooks/use-is-desktop";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,8 @@ export default function RootLayout() {
     Rubik_600SemiBold,
     Rubik_700Bold,
   });
+
+  const isDesktop = useIsDesktop();
 
   if (!fontsLoaded) {
     return null;
@@ -44,7 +47,7 @@ export default function RootLayout() {
               <Stack.Screen
                 name="auth/login"
                 options={{
-                  headerShown: true,
+                  headerShown: !isDesktop,
                   title: "Entrar",
                   presentation: "modal",
                 }}
@@ -52,7 +55,7 @@ export default function RootLayout() {
               <Stack.Screen
                 name="auth/register"
                 options={{
-                  headerShown: true,
+                  headerShown: !isDesktop,
                   title: "Cadastrar",
                   presentation: "modal",
                 }}
